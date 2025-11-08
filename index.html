@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quy Đổi Coin Sang USD & VND</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background: #f1c40f;
+      color: black;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ffde59;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #2ecc71;
+    }
+  </style>
+</head>
+<body>
+  <h1>💱 Quy Đổi Coin Sang USD & VND</h1>
+
+  <input type="number" id="amount" placeholder="Nhập số lượng coin" />
+  <select id="coin">
+    <option value="bitcoin">Bitcoin (BTC)</option>
+    <option value="ethereum">Ethereum (ETH)</option>
+    <option value="binancecoin">BNB</option>
+    <option value="solana">Solana (SOL)</option>
+  </select>
+  <button onclick="convert()">Quy đổi</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    async function convert() {
+      const amount = document.getElementById("amount").value;
+      const coin = document.getElementById("coin").value;
+      const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd,vnd`);
+      const data = await res.json();
+      const usd = data[coin].usd * amount;
+      const vnd = data[coin].vnd * amount;
+
+      document.getElementById("result").innerHTML = `
+        💰 ${amount} ${coin.toUpperCase()} = 
+        <br>💵 ${usd.toLocaleString()} USD 
+        <br>🇻🇳 ${vnd.toLocaleString()} VND
+      `;
+    }
+  </script>
+</body>
+</html>
